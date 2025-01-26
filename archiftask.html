@@ -1,0 +1,154 @@
+<!-- 
+    حقوق الملكية © 2025 [   Nedal AL-shami] جميع الخقوق محفوظة
+    هذا الكود محمي بموجب رخصة MIT.
+    لمزيد من المعلومات، راجع ملف الترخيص (LICENSE).
+-->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>تنسيق المهام | مهامي</title>
+        <meta name="description" content="قم بإدارة مهامك بسهولة باستخدام تطبيق مهامي. أضف مهام، حدد مواعيد، وانجزها بكفاءة.">
+        <meta name="keywords" content="إدارة المهام, تطبيق المهام, تنظيم الوقت, مهام يومية">
+        <meta name="author" content="اسمك هنا">
+        <meta name="robots" content="index, follow">
+        <link rel="canonical" href="https://your-github-username.github.io/your-repo-name/">
+        
+        <meta property="og:title" content="تنسيق المهام | مهامي">
+        <meta property="og:description" content="قم بإدارة مهامك بسهولة باستخدام تطبيق مهامي. أضف مهام، حدد مواعيد، وانجزها بكفاءة.">
+        <meta property="og:image" content="https://your-website.com/path-to-image.png">
+        <meta property="og:url" content="https://your-github-username.github.io/your-repo-name/">
+        <meta property="og:type" content="website">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="تنسيق المهام | مهامي">
+        <meta name="twitter:description" content="قم بإدارة مهامك بسهولة باستخدام تطبيق مهامي.">
+        <meta name="twitter:image" content="https://your-website.com/path-to-image.png">
+        <meta http-equiv="Cache-Control" content="public, max-age=2592000">
+        <meta http-equiv="Expires" content="Tue, 25 Feb 2025 12:00:00 GMT">
+<meta http-equiv="refresh" content = "60; url = archiftask.html "/>        
+<link rel="stylesheet" href="style.css">
+<title>أرشيف المهام</title>
+   
+<link rel="icon" href="page.png" alt="إدارة المهام باستخدام تطبيق مهامي">
+
+</head>
+<body>
+   <!--  -->
+    <!-- زر الثلاث شخط -->
+<button class="menu-toggle" onclick="toggleMenu()">☰</button>
+
+<!-- المحتوى المخفي -->
+<main id="main-content">
+    <section>
+        <h2>كيفية استخدام التطبيق</h2>
+        <p>   قم بإضافة المهام، حدد اليوم /التاريخ / الساعة ثم اضغط على أضف مهمة .</p>
+    </section>
+    <section>
+        <h2>مزايا التطبيق</h2>
+        <ul>
+            <li>إدارة المهام بسهولة.</li>
+            <li>إمكانية تذكير بالمواعيد.</li>
+            <li>أرشفة المهام المكتملة.</li>
+        </ul>
+    </section>
+</main>
+<!--  -->
+<button id="back" ><a href="index.html"> العودة للصفحة الرئيسية </a></button>
+
+<table id="table_head">
+    <tr><th>أرشيف المهام</th></tr>
+</table>
+<input id="searchDate" type="date" placeholder="ابحث عن المهام بالتاريخ">
+<button class="search" onclick="searchTasks()">بحث</button>
+<table id="table" border="3">
+    <thead>
+        <tr>
+            <th>اسم المهمة</th>
+            <th>التاريخ/ اليوم</th>
+            <th>الساعة</th>
+            <th>احذف مهمة</th>
+            <th>اكتملت المهمة</th>
+        </tr>
+    </thead>
+    <tbody id="t_body"></tbody>
+<div class="divBody">
+
+</table>
+<audio id="alertSound" src="alart.mp3"></audio>
+<footer>
+    <p>حقوق النشر ©  Nedal AL-shami 2025. <a href="LICENSE.txt" target="_blank">عرض الترخيص</a></p>
+</footer>
+<script>
+function loadData(key) {
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : [];
+}
+
+function savedata(key, data) {
+    localStorage.setItem(key, JSON.stringify(data));
+}
+
+function renderArchive(tasks) {
+    const t_body = document.getElementById("t_body");
+    t_body.innerHTML = '';
+
+    tasks.forEach((task, index) => {
+        const textDecoration = task.completed ? 'line-through' : 'none';
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td style="text-decoration: ${textDecoration};">${task.name}</td>
+            <td style="text-decoration: ${textDecoration};">${task.date}</td>
+            <td style="text-decoration: ${textDecoration};">${task.time}</td>
+            <td><button onclick="deleteTask(${index})">حذف</button></td>
+            <td><button onclick="completeTask(${index})">${task.completed ? '✔️' : 'اكتملت'}</button></td>
+        `;
+        t_body.appendChild(row);
+    });
+}
+
+function searchTasks() {
+    const searchDate = document.getElementById("searchDate").value;
+    if (!searchDate) {
+        alert('يرجى اختيار تاريخ للبحث');
+        return;
+    }
+
+    const archive = loadData('archive') || [];
+    const filteredTasks = archive.filter(task => task.date === searchDate);
+    renderArchive(filteredTasks);
+}
+
+function deleteTask(index) {
+    const archive = loadData('archive') || [];
+    archive.splice(index, 1);
+    savedata('archive', archive);
+    searchTasks();
+}
+
+function completeTask(index) {
+    const archive = loadData('archive') || [];
+    archive[index].completed = true;
+    savedata('archive', archive);
+    searchTasks();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    renderArchive(loadData('archive') || []);
+});
+function toggleMenu() {
+    const mainContent = document.getElementById("main-content");
+    // تبديل العرض بين الإظهار والإخفاء
+    if (mainContent.style.display === "none" || mainContent.style.display === "") {
+        mainContent.style.display = "block";
+    } else {
+        mainContent.style.display = "none";
+    }
+}
+</script>
+</body>
+</html>

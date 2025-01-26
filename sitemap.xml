@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+Sitemap: https://nedalalshami-github-username.github.io/todo-task-app/sitemap.xml
+
+Disallow: /index.html
+Disallow: /archiftask.html
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>
+        https://nedalalshami-github-username.github.io/todo-task-app/
+        </loc>
+        <lastmod>2025-01-26</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+</urlset>
+
+
+
+
+

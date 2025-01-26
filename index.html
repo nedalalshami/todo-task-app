@@ -1,0 +1,219 @@
+<!-- 
+    حقوق الملكية © 2025 [   Nedal AL-shami] جميع الخقوق محفوظة
+    هذا الكود محمي بموجب رخصة MIT.
+    لمزيد من المعلومات، راجع ملف الترخيص (LICENSE).
+-->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تنسيق المهام | مهامي</title>
+    <meta name="description" content="قم بإدارة مهامك بسهولة باستخدام تطبيق مهامي. أضف مهام، حدد مواعيد، وانجزها بكفاءة.">
+    <meta name="keywords" content="إدارة المهام, تطبيق المهام, تنظيم الوقت, مهام يومية">
+    <meta name="author" content="اسمك هنا">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://your-github-username.github.io/your-repo-name/">
+    <meta property="og:title" content="تنسيق المهام | مهامي">
+    <meta property="og:description" content="قم بإدارة مهامك بسهولة باستخدام تطبيق مهامي. أضف مهام، حدد مواعيد، وانجزها بكفاءة.">
+    <meta property="og:image" content="https://your-website.com/path-to-image.png">
+    <meta property="og:url" content="https://your-github-username.github.io/your-repo-name/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="تنسيق المهام | مهامي">
+    <meta name="twitter:description" content="قم بإدارة مهامك بسهولة باستخدام تطبيق مهامي.">
+    <meta name="twitter:image" content="https://your-website.com/path-to-image.png">
+    <meta http-equiv="Cache-Control" content="public, max-age=2592000">
+    <meta http-equiv="Expires" content="Tue, 25 Feb 2025 12:00:00 GMT">
+<meta http-equiv="refresh" content = "60; url = index.html "/>        
+<link rel="stylesheet" href="style.css">
+    <title>مهامي</title>
+    <link rel="stylesheet" href="style.css">
+<link rel="icon" href="page.png" alt="إدارة المهام باستخدام تطبيق مهامي">
+
+</head>
+<body>
+  
+<!-- زر الثلاث شخط -->
+<button class="menu-toggle" onclick="toggleMenu()">☰</button>
+
+<!-- المحتوى المخفي -->
+<main id="main-content">
+    <section>
+        <h2>كيفية استخدام التطبيق</h2>
+        <p>   قم بإضافة المهام، حدد اليوم /التاريخ / الساعة ثم اضغط على أضف مهمة .</p>
+    </section>
+    <section>
+        <h2>مزايا التطبيق</h2>
+        <ul>
+            <li>إدارة المهام بسهولة.</li>
+            <li>إمكانية تذكير بالمواعيد.</li>
+            <li>أرشفة المهام المكتملة.</li>
+        </ul>
+    </section>
+</main>
+<!--  -->
+<table id="table_head">
+    <tr><th>إبـدأ بتنسيق مهامك</th></tr>
+</table>
+<table id="table" border="3">
+    <thead>
+        <tr>
+            <th>اسم المهمة</th>
+            <th>التاريخ/ اليوم</th>
+            <th>الساعة</th>
+            <th>احذف مهمة</th>
+            <th>اكتملت المهمة</th>
+            <th>جرس التنبيه</th>
+        </tr>
+    </thead>
+    <tbody id="t_body"></tbody>
+</table>
+<div class="task">
+    <input id="name" type="text" maxlength="50" placeholder="أكتب المهمة هنا">
+    <input id="date" type="date">
+    <input id="time" type="time">
+    <button onclick="addTr()">أضف مهمة</button>
+    <button onclick="archiveTasks()">أرشفة المهام</button>
+    <button onclick="openArchive()">عرض الأرشيف</button>
+</div>
+<div class="divBody">
+   
+</div>
+<audio id="alertSound" src="alart.mp3"></audio>
+
+<footer>
+    <p>حقوق النشر ©  Nedal AL-shami 2025. <a href="LICENSE.txt" target="_blank">عرض الترخيص</a></p>
+</footer>
+
+<script>
+function savedata(key, data) {
+    localStorage.setItem(key, JSON.stringify(data));
+}
+
+function loadData(key) {
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : [];
+}
+
+function render() {
+    const myData = loadData('tasks') || [];
+    const t_body = document.getElementById("t_body");
+    t_body.innerHTML = '';
+
+    myData.forEach((task, index) => {
+        const textDecoration = task.completed ? 'line-through' : 'none';
+        const alarmIcon = task.alarm ? '🔔' : '🔕';
+        const alarmButtonDisabled = task.completed ? 'disabled' : '';
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td style="text-decoration: ${textDecoration};">${task.name}</td>
+            <td style="text-decoration: ${textDecoration};">${task.date}</td>
+            <td style="text-decoration: ${textDecoration};">${task.time}</td>
+            <td><button onclick="deleteTask(${index})">حذف</button></td>
+            <td><button onclick="completeTask(${index})">${task.completed ? '✔️' : 'اكتملت'}</button></td>
+            <td><button onclick="toggleAlarm(${index})" ${alarmButtonDisabled}>${alarmIcon}</button></td>
+        `;
+        t_body.appendChild(row);
+    });
+}
+
+
+
+
+///////////////////////////////
+function addTr() {
+    const name = document.getElementById("name").value;
+    const date = document.getElementById("date").value;
+    const time = document.getElementById("time").value;
+
+    if (name && date && time) {
+        const myData = loadData('tasks') || [];
+        myData.push({ name, date, time, completed: false, alarm: false });
+        savedata('tasks', myData);
+        render();
+        document.getElementById("name").value = '';
+        document.getElementById("date").value = '';
+        document.getElementById("time").value = '';
+    } else {
+        alert('رجاء أدخل كافة الحقول');
+    }
+}
+////////////////////
+
+function deleteTask(index) {
+    const myData = loadData('tasks') || [];
+    myData.splice(index, 1);
+    savedata('tasks', myData);
+    render();
+}
+
+function completeTask(index) {
+    const myData = loadData('tasks') || [];
+    myData[index].completed = true;
+
+    myData[index].alarm = false; // تعطيل التنبيه عند اكتمال المهمة
+
+    savedata('tasks', myData);
+    render();
+}
+
+function toggleAlarm(index) {
+    const myData = loadData('tasks') || [];
+    myData[index].alarm = !myData[index].alarm;
+    savedata('tasks', myData);
+    render();
+
+    if (myData[index].alarm) {
+        const taskTime = new Date(`${myData[index].date}T${myData[index].time}`);
+        const currentTime = new Date();
+        const timeDifference = taskTime - currentTime;
+
+        if (timeDifference > 0) {
+            setTimeout(() => {
+                const alertSound = document.getElementById('alertSound');
+                alertSound.play();
+                alert(`تذكير: ${myData[index].name}`);
+            }, timeDifference);
+        } else {
+            alert("لا يمكن ضبط تنبيه لمهمة في وقت سابق.");
+        }
+    }
+}
+
+function archiveTasks() {
+    const myData = loadData('tasks') || [];
+    if (myData.length > 0) {
+        const archive = loadData('archive') || [];
+        archive.push(...myData);
+        savedata('archive', archive);
+        savedata('tasks', []);
+        alert('تم أرشفة المهام بنجاح');
+        render();
+    } else {
+        alert('لا توجد مهام للأرشفة');
+    }
+}
+
+function openArchive() {
+    window.location.href = 'archiftask.html';
+}
+
+document.addEventListener('DOMContentLoaded', render);
+
+
+function toggleMenu() {
+    const mainContent = document.getElementById("main-content");
+    // تبديل العرض بين الإظهار والإخفاء
+    if (mainContent.style.display === "none" || mainContent.style.display === "") {
+        mainContent.style.display = "block";
+    } else {
+        mainContent.style.display = "none";
+    }
+}
+
+
+</script>
+</body>
+</html>
