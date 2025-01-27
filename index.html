@@ -162,8 +162,7 @@ function completeTask(index) {
 function toggleAlarm(index) {
     const myData = loadData('tasks') || [];
     myData[index].alarm = !myData[index].alarm;
-    savedata('tasks', myData);
-    render();
+  
 
     if (myData[index].alarm) {
         const taskTime = new Date(`${myData[index].date}T${myData[index].time}`);
@@ -179,6 +178,8 @@ function toggleAlarm(index) {
         } else {
             alert("لا يمكن ضبط تنبيه لمهمة في وقت سابق.");
         }
+          savedata('tasks', myData);
+    render();
     }
 }
 
