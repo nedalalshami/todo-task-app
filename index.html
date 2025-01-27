@@ -95,7 +95,78 @@ function loadData(key) {
     const data = localStorage.getItem(key);
     return data ? JSON.parse(data) : [];
 }
+// loging user
 
+    function register() {
+    const username = document.getElementById('new-username').value;
+    const password = document.getElementById('new-password').value;
+
+    if (username && password) {
+        const users = loadData('users') || [];
+        if (users.some(user => user.username === username)) {
+            alert('اسم المستخدم موجود بالفعل!');
+        } else {
+            users.push({ username, password, tasks: [] });
+            savedata('users', users);
+            alert('تم إنشاء الحساب بنجاح!');
+        }
+    } else {
+        alert('رجاءً أدخل اسم المستخدم وكلمة المرور.');
+    }
+}
+
+function login() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    const users = loadData('users') || [];
+    const user = users.find(user => user.username === username && user.password === password);
+
+    if (user) {
+        savedata('currentUser', username);
+        alert('تم تسجيل الدخول بنجاح!');
+        render(); // عرض المهام المرتبطة بالمستخدم
+    } else {
+        alert('اسم المستخدم أو كلمة المرور غير صحيحة.');
+    }
+}
+
+function getCurrentUser() {
+    const username = loadData('currentUser');
+    const users = loadData('users') || [];
+    return users.find(user => user.username === username);
+}
+
+function saveUserTasks(tasks) {
+    const currentUser = getCurrentUser();
+    if (currentUser) {
+        const users = loadData('users') || [];
+        const userIndex = users.findIndex(user => user.username === currentUser.username);
+        if (userIndex > -1) {
+            users[userIndex].tasks = tasks;
+            savedata('users', users);
+        }
+    }
+}
+
+function loadUserTasks() {
+    const currentUser = getCurrentUser();
+    return currentUser ? currentUser.tasks : [];
+}
+
+    //End loging
+    // اخفاء واظهار قسم تسجيل الدخول
+    document.addEventListener('DOMContentLoaded', () => {
+    const currentUser = loadData('currentUser');
+    if (currentUser) {
+        render();
+        document.getElementById('auth-container').style.display = 'none';
+    } else {
+        document.getElementById('auth-container').style.display = 'block';
+    }
+});
+
+    ///////
 function render() {
     const myData = loadData('tasks') || [];
     const t_body = document.getElementById("t_body");
