@@ -155,18 +155,7 @@ function loadUserTasks() {
 }
 
     //End loging
-    // اخفاء واظهار قسم تسجيل الدخول
-    document.addEventListener('DOMContentLoaded', () => {
-    const currentUser = loadData('currentUser');
-    if (currentUser) {
-        render();
-        document.getElementById('auth-container').style.display = 'block';
-    } else {
-        document.getElementById('auth-container').style.display = 'none';
-    }
-});
 
-    ///////
 function render() {
     const myData = loadData('tasks') || [];
     const t_body = document.getElementById("t_body");
