@@ -95,42 +95,8 @@ function loadData(key) {
     const data = localStorage.getItem(key);
     return data ? JSON.parse(data) : [];
 }
-// loging user
 
-    function register() {
-    const username = document.getElementById('new-username').value;
-    const password = document.getElementById('new-password').value;
-
-    if (username && password) {
-        const users = loadData('users') || [];
-        if (users.some(user => user.username === username)) {
-            alert('اسم المستخدم موجود بالفعل!');
-        } else {
-            users.push({ username, password, tasks: [] });
-            savedata('users', users);
-            alert('تم إنشاء الحساب بنجاح!');
-        }
-    } else {
-        alert('رجاءً أدخل اسم المستخدم وكلمة المرور.');
-    }
-}
-
-function login() {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-
-    const users = loadData('users') || [];
-    const user = users.find(user => user.username === username && user.password === password);
-
-    if (user) {
-        savedata('currentUser', username);
-        alert('تم تسجيل الدخول بنجاح!');
-        render(); // عرض المهام المرتبطة بالمستخدم
-    } else {
-        alert('اسم المستخدم أو كلمة المرور غير صحيحة.');
-    }
-}
-
+ 
 function getCurrentUser() {
     const username = loadData('currentUser');
     const users = loadData('users') || [];
